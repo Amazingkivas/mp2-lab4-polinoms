@@ -12,8 +12,8 @@ private:
         double coefficient;
         size_t degree;
 
-        bool operator==(const Monom& other); // comparison of monomials
-        bool operator!=(const Monom& other); // comparison of monomials
+        bool operator==(const Monom& other) const; // comparison of monomials
+        bool operator!=(const Monom& other) const; // comparison of monomials
     };
 
     List<Monom> polynom;

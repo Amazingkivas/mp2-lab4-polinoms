@@ -1,11 +1,11 @@
 #include "polynom.h"
 
-bool Polynom::Monom::operator==(const Monom& other)
+bool Polynom::Monom::operator==(const Monom& other) const
 {
     return coefficient == other.coefficient && degree == other.degree;
 }
 
-bool Polynom::Monom::operator!=(const Monom& other)
+bool Polynom::Monom::operator!=(const Monom& other) const
 {
     return !(*this == other);
 }
