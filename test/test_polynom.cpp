@@ -118,3 +118,13 @@ TEST(Polynom, can_multiply_polynoms_by_number)
 	res.add_monom(1.5, 105);
 	EXPECT_EQ(res, poly * -3.0);
 }
+
+TEST(Polynom, can_compare_polynoms)
+{
+	Polynom pol1, pol2;
+	pol1.add_monom(1.2, 1);
+	pol1.add_monom(-0.1, 1);
+	pol2.add_monom(1.1, 1);
+	EXPECT_EQ(true, pol1 == pol2);
+	EXPECT_EQ(false, pol1 != pol2);
+}

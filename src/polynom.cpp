@@ -2,9 +2,8 @@
 
 bool Polynom::Monom::operator==(const Monom& other) const
 {
-    return coefficient == other.coefficient && degree == other.degree;
+    return abs(coefficient - other.coefficient) < eps && degree == other.degree;
 }
-
 bool Polynom::Monom::operator!=(const Monom& other) const
 {
     return !(*this == other);
@@ -12,7 +11,7 @@ bool Polynom::Monom::operator!=(const Monom& other) const
 
 void Polynom::add_monom(double coef, size_t deg)
 {
-    if (coef == 0) return; 
+    if (abs(coef) < eps) return; 
     if (deg < 0 || deg > 999) throw exception("Exceeding the permissible degree");
     
     Monom monom{ coef, deg };
@@ -33,25 +32,20 @@ void Polynom::add_monom(double coef, size_t deg)
             }
             else if (deg == (*iter).degree)
             {
-                if ((*iter).coefficient + coef != 0)
-                {
-                    (*iter).coefficient += coef;
-                }
-                else
+                if (abs((*iter).coefficient + coef) < eps)
                 {
                     if (i == 0) polynom.pop_front();
                     else polynom.erase_after(i - 1);
                 }
+                else
+                {
+                    (*iter).coefficient += coef;
+                }
                 return;
             }
         }
-        polynom.insert_after(psize() - 1, monom);
+        polynom.push_back(monom);
     }
-}
-
-void Polynom::add_monom(const Monom& monom)
-{
-    add_monom(monom.coefficient, monom.degree);
 }
 
 size_t Polynom::psize() const
@@ -68,36 +62,35 @@ Polynom Polynom::operator+(const Polynom& other)
     {
         if ((*iter1).degree > (*iter2).degree)
         {
-            result.add_monom(*iter1);
+            result.polynom.push_back(*iter1);
             ++iter1;
         }
         else if ((*iter1).degree < (*iter2).degree)
         {
-            result.add_monom(*iter2);
+            result.polynom.push_back(*iter2);
             ++iter2;
         }
         else
         {
             double total_coef = (*iter1).coefficient + (*iter2).coefficient;
             ++iter2;
-            if (total_coef != 0)
+            if (!(abs(total_coef) < eps))
             {
-                result.add_monom(total_coef, (*iter1).degree);
+                result.polynom.push_back(Monom{ total_coef, (*iter1).degree });
             }
             ++iter1;
         }
     }
     for (; iter1 != polynom.end(); ++iter1)
     {
-        result.add_monom(*iter1);
+        result.polynom.push_back(*iter1);
     }
     for (; iter2 != other.polynom.end(); ++iter2)
     {
-        result.add_monom(*iter2);
+        result.polynom.push_back(*iter2);
     }
     return result;
 }
-
 Polynom Polynom::operator*(const Polynom& other)
 {
     Polynom result;
@@ -121,17 +114,16 @@ Polynom Polynom::operator*(const Polynom& other)
     }
     return result;
 }
-
 Polynom Polynom::operator*(const double& coef) const
 {
     Polynom result;
+    if (abs(coef) < eps) return result;
     for (List<Monom>::iterator iter = polynom.begin(); iter != polynom.end(); ++iter)
     {
-        result.add_monom((*iter).coefficient * coef, (*iter).degree);
+        result.polynom.push_back(Monom{ (*iter).coefficient * coef, (*iter).degree });
     }
     return result;
 }
-
 Polynom Polynom::operator-(const Polynom& other)
 {
     return *this + other * -1.0;
@@ -141,7 +133,6 @@ bool Polynom::operator==(const Polynom& other) const
 {
     return psize() == other.psize() && polynom == other.polynom;
 }
-
 bool Polynom::operator!=(const Polynom& other) const
 {
     return !(*this == other);
@@ -149,14 +140,17 @@ bool Polynom::operator!=(const Polynom& other) const
 
 void Polynom::show()
 {
-    size_t i = 0;
+    if (psize() == 0)
+    {
+        std::cout << "null polynomial";
+    }
     std::string zeros = "";
-    for (List<Monom>::iterator iter = polynom.begin(); iter != polynom.end(); ++iter, i++)
+    for (List<Monom>::iterator iter = polynom.begin(); iter != polynom.end();)
     {
         if ((*iter).degree <= 9) zeros = "00";
         else if ((*iter).degree <= 99) zeros = "0";
 
         std::cout << "{ " << ( *iter).coefficient << " , " << zeros << (*iter).degree << " }";
-        if (i != psize() - 1) std::cout << " + ";
+        if (++iter != nullptr) std::cout << " + ";
     }
 }

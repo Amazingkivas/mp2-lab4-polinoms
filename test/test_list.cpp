@@ -10,7 +10,18 @@ TEST(List, can_insert_node_front)
 {
 	List<int> lst;
 	lst.push_front(1);
+	lst.push_front(2);
+	EXPECT_EQ(lst[0], 2);
+	EXPECT_EQ(lst[1], 1);
+}
+
+TEST(List, can_insert_node_back)
+{
+	List<int> lst;
+	lst.push_back(1);
+	lst.push_back(2);
 	EXPECT_EQ(lst[0], 1);
+	EXPECT_EQ(lst[1], 2);
 }
 
 TEST(List, can_insert_node_after_other_node)
@@ -22,6 +33,14 @@ TEST(List, can_insert_node_after_other_node)
 	EXPECT_EQ(lst[1], 2);
 	lst.insert_after(2, 4);
 	EXPECT_EQ(lst[3], 4);
+}
+
+TEST(List, throws_when_insert_position_out_of_range)
+{
+	List<int> lst;
+	lst.push_back(1);
+	ASSERT_ANY_THROW(lst.insert_after(1, 2));
+	ASSERT_ANY_THROW(lst.insert_after(-1, 2));
 }
 
 TEST(List, isempty_return_true_when_list_is_actually_empty)
@@ -41,6 +60,12 @@ TEST(List, can_erase_node_front)
 	EXPECT_EQ(true, lst.isEmpty());
 }
 
+TEST(List, throws_when_attempt_erase_node_from_empty_list)
+{
+	List<int> lst;
+	ASSERT_ANY_THROW(lst.pop_front());
+}
+
 TEST(List, can_erase_node_after_other_node)
 {
 	List<int> lst;
@@ -50,6 +75,19 @@ TEST(List, can_erase_node_after_other_node)
 	EXPECT_EQ(lst[1], 2);
 	lst.erase_after(0);
 	EXPECT_EQ(lst[1], 3);
+	lst.erase_after(0);
+	EXPECT_EQ(1, lst.get_size());
+	lst.push_back(2);
+	EXPECT_EQ(2, lst[1]);
+}
+
+TEST(List, throws_when_erase_position_out_of_range)
+{
+	List<int> lst;
+	lst.push_back(1);
+	ASSERT_ANY_THROW(lst.erase_after(0));
+	ASSERT_ANY_THROW(lst.erase_after(-1));
+	ASSERT_ANY_THROW(lst.erase_after(1));
 }
 
 TEST(List, can_get_list_size)

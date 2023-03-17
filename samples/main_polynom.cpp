@@ -4,7 +4,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-void fill(Polynom& poly)
+bool fill(Polynom& poly) // return false if the polynomial could not be filled in
 {
 	int num;
 	cout << "\nEnter the number of monomials in the polynomial: " ;
@@ -12,7 +12,7 @@ void fill(Polynom& poly)
 	if (num < 1)
 	{
 		cout << "ERROR: Non-positive number of monomials" << endl;
-		exit(1);
+		return false;
 	}
 
 	cout << "\nFilling the polynomial" << endl;
@@ -32,9 +32,10 @@ void fill(Polynom& poly)
 		catch (const exception& except)
 		{
 			cout << "\nERROR: " << except.what() << endl;
-			exit(1);
+			return false;
 		}
 	}
+	return true;
 }
 
 int main()
@@ -44,7 +45,7 @@ int main()
 	cout << "For example: 5x^2y^3z^4 -> { 5 , 234 }" << endl;
 
 	Polynom pol1;
-	fill(pol1);
+	if(!fill(pol1)) return 1;
 	cout << "\nPolynomial: ";
 	pol1.show();
 
@@ -75,7 +76,7 @@ int main()
 	case ADD_POLYNOMIALS:
 	{
 		Polynom pol2;
-		fill(pol2);
+		if(!fill(pol2)) return 1;
 		cout << "\nPolynomial: ";
 		pol2.show();
 		cout << "\n\nResult: ";
@@ -85,7 +86,7 @@ int main()
 	case SUBTRACT_POLYNOMIALS:
 	{
 		Polynom pol2;
-		fill(pol2);
+		if (!fill(pol2)) return 1;
 		cout << "\nPolynomial: ";
 		pol2.show();
 		cout << "\n\nResult: ";
@@ -95,17 +96,18 @@ int main()
 	case MULTIPLY_POLYNOMIALS:
 	{
 		Polynom pol2;
-		fill(pol2);
+		if (!fill(pol2)) return 1;
 		cout << "\nPolynomial: ";
 		pol2.show();
 		try
 		{
 			cout << "\n\nResult: ";
-			(pol1* pol2).show();
+			(pol1 * pol2).show();
 		}
 		catch (const exception& except)
 		{
 			cout << "\n\nERROR: " << except.what() << endl;
+			return 1;
 		}
 		break;
 	}
