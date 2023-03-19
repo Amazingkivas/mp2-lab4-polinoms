@@ -7,7 +7,7 @@ using std::endl;
 bool fill(Polynom& poly) // return false if the polynomial could not be filled in
 {
 	int num;
-	cout << "\nEnter the number of monomials in the polynomial: " ;
+	cout << "\nEnter the number of monomials in the polynomial: ";
 	cin >> num;
 	if (num < 1)
 	{
@@ -40,12 +40,15 @@ bool fill(Polynom& poly) // return false if the polynomial could not be filled i
 
 int main()
 {
+	cout << "Dear user, for the correct operation of the program ";
+	cout << "do NOT enter any weird symbols like commas, pound symbol and others!" << endl;
+	cout << "Use decimal separator ONLY as a point for entering real numbers\n" << endl;
 	cout << "Monomial representation: { coefficient , degree }" << endl;
 	cout << "Degree representation: three-digit number ABC (x^Ay^Bz^C, 0 <= A,B,C <= 9)" << endl;
 	cout << "For example: 5x^2y^3z^4 -> { 5 , 234 }" << endl;
 
 	Polynom pol1;
-	if(!fill(pol1)) return 1;
+	if (!fill(pol1)) return 1;
 	cout << "\nPolynomial: ";
 	pol1.show();
 
@@ -65,18 +68,12 @@ int main()
 	cout << "\nOperation number: ";
 	cin >> select;
 
-	if (select > 4 || select < 1)
-	{
-		cout << "\nERROR: Invalid operation number" << endl;
-		return 1;
-	}
-
 	switch (select)
 	{
 	case ADD_POLYNOMIALS:
 	{
 		Polynom pol2;
-		if(!fill(pol2)) return 1;
+		if (!fill(pol2)) return 1;
 		cout << "\nPolynomial: ";
 		pol2.show();
 		cout << "\n\nResult: ";
@@ -120,7 +117,13 @@ int main()
 		(pol1 * number).show();
 		break;
 	}
+	default:
+	{
+		cout << "\nERROR: Invalid operation number" << endl;
+		return 1;
 	}
+	}
+	cout << endl;
 
 	return 0;
 }

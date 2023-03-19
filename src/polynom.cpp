@@ -150,7 +150,7 @@ void Polynom::show()
         if ((*iter).degree <= 9) zeros = "00";
         else if ((*iter).degree <= 99) zeros = "0";
 
-        std::cout << "{ " << ( *iter).coefficient << " , " << zeros << (*iter).degree << " }";
+        std::cout << "{ " << (*iter).coefficient << " , " << zeros << (*iter).degree << " }";
         if (++iter != nullptr) std::cout << " + ";
     }
 }
